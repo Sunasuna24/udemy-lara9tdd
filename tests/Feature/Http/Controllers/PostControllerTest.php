@@ -61,4 +61,16 @@ class PostControllerTest extends TestCase
     //     dump(User::get()->toArray());
     //     $this->assertTrue(true);
     // }
+
+    /** @test */
+    function ブログの詳細画面を表示できる()
+    {
+        //
+    }
+
+    /** @test */
+    function 非公開のブログは詳細画面が表示されない()
+    {
+        //
+    }
 }
