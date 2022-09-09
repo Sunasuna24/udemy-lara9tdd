@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -105,5 +106,30 @@ class PostControllerTest extends TestCase
         $this->get(route('posts.show', $post->id))
              ->assertSee('メリークリスマス！');
 
+    }
+
+    /** @test */
+    function ブログの詳細ページでコメントが表示される()
+    {
+        $post = Post::factory()->create();
+        $comment = Comment::factory()->create([
+            'created_at' => now()->subDays(2),
+            'name' => 'コメント太郎',
+            'post_id' => $post->id
+        ]);
+        $comment = Comment::factory()->create([
+            'created_at' => now()->subDays(3),
+            'name' => 'コメント二郎',
+            'post_id' => $post->id
+        ]);
+        $comment = Comment::factory()->create([
+            'created_at' => now()->subDays(1),
+            'name' => 'コメント三郎',
+            'post_id' => $post->id
+        ]);
+
+        $this->get(route('posts.show', $post->id))
+             ->assertOk()
+             ->assertSeeInOrder(['コメント二郎', 'コメント太郎', 'コメント三郎']);
     }
 }
