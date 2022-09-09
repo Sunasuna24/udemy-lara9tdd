@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(15)->create()->each(function ($user) {
             Post::factory(random_int(2,5))->create(['user_id' => $user->id])->each(function ($post) {
-                Comment::factory(random_int(1,3))->create(['post_id' => $post->id]);
+                Comment::factory(random_int(1,5))->create(['post_id' => $post->id]);
             });
         });
     }
