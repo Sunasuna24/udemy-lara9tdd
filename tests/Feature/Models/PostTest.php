@@ -26,4 +26,15 @@ class PostTest extends TestCase
         $post = Post::factory()->create();
         $this->assertInstanceOf(Collection::class, $post->comments);
     }
+
+    /** @test */
+    function ブログの公開スコープ()
+    {
+        $closed_post = Post::factory()->statusClosed()->create();
+        $published_post = Post::factory()->create();
+        $published_posts = Post::onlyPublished()->get();
+
+        $this->assertFalse($published_posts->contains($closed_post));
+        $this->assertTrue($published_posts->contains($published_post));
+    }
 }
