@@ -38,6 +38,21 @@ class PostListControllerTest extends TestCase
               ->assertSeeInOrder(['5件のコメント', '3件のコメント', '1件のコメント']);
     }
 
+    /** @test */
+    function ブログ一覧で非公開ステータスは表示しない()
+    {
+        $closed_post = Post::factory()->statusClosed()->create([
+            'title' => "これは非公開のブログです"
+        ]);
+        $published_post = Post::factory()->create([
+            'title' => "公開済みのブログ"
+        ]);
+
+        $this->get('/')
+              ->assertDontSee("これは非公開のブログです")
+              ->assertSee('公開済みのブログ');
+    }
+
     // /** @test */
     // function factoryの観察()
     // {
