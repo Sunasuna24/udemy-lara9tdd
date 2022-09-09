@@ -1,6 +1,6 @@
-@extends('layouts.app');
+@extends('layouts.app')
 
-@section('content');
+@section('content')
 
 @if (today()->is('12-25'))
 <h1>メリークリスマス！</h1>
