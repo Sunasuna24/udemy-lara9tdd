@@ -28,7 +28,7 @@ class PostTest extends TestCase
     }
 
     /** @test */
-    function ブログの公開スコープ()
+    function ブログの公開スコープの確認()
     {
         $closed_post = Post::factory()->statusClosed()->create();
         $published_post = Post::factory()->create();
