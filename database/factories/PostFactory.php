@@ -24,7 +24,7 @@ class PostFactory extends Factory
             // 'user_id' => function () {
             //     return User::factory()->create()->id;
             // },
-            'status' => Post::PUBLISH,
+            'status' => Post::PUBLISHED,
             'title' => $this->faker->realText(20),
             'body' => $this->faker->realText(200)
         ];
@@ -34,7 +34,16 @@ class PostFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'status' => $this->faker->randomElement([Post::CLOSED, Post::PUBLISH, Post::PUBLISH, Post::PUBLISH, Post::PUBLISH])
+                'status' => $this->faker->randomElement([Post::CLOSED, Post::PUBLISHED, Post::PUBLISHED, Post::PUBLISHED, Post::PUBLISHED])
+            ];
+        });
+    }
+
+    public function statusClosed()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => Post::CLOSED
             ];
         });
     }

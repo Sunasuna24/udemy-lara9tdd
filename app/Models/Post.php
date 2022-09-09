@@ -12,7 +12,7 @@ class Post extends Model
     use HasFactory;
 
     const CLOSED = 0;
-    const PUBLISH = 1;
+    const PUBLISHED = 1;
 
     public function user()
     {
