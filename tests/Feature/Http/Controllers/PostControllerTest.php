@@ -65,7 +65,12 @@ class PostControllerTest extends TestCase
     /** @test */
     function ブログの詳細画面を表示できる()
     {
-        //
+        $post = Post::factory()->create();
+
+        $this->get('posts/' . $post->id)
+              ->assertOk()
+              ->assertSee($post->title)
+              ->assertSee($post->user->name);
     }
 
     /** @test */
