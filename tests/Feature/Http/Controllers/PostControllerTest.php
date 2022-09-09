@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class PostListControllerTest extends TestCase
+class PostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -61,4 +61,21 @@ class PostListControllerTest extends TestCase
     //     dump(User::get()->toArray());
     //     $this->assertTrue(true);
     // }
+
+    /** @test */
+    function ブログの詳細画面を表示できる()
+    {
+        $post = Post::factory()->create();
+
+        $this->get('posts/' . $post->id)
+              ->assertOk()
+              ->assertSee($post->title)
+              ->assertSee($post->user->name);
+    }
+
+    /** @test */
+    function 非公開のブログは詳細画面が表示されない()
+    {
+        //
+    }
 }
