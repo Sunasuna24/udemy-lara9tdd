@@ -76,6 +76,9 @@ class PostControllerTest extends TestCase
     /** @test */
     function 非公開のブログは詳細画面が表示されない()
     {
-        //
+        $closed_post = Post::factory()->statusClosed()->create();
+
+        $this->get(route('posts.show', $closed_post->id))
+             ->assertForbidden();
     }
 }

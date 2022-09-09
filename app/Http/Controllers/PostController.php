@@ -16,6 +16,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
+        if ($post->isClosed()) abort(403);
         return view('posts.show')->with('post', $post);
     }
 }

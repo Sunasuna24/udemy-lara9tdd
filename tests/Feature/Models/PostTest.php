@@ -37,4 +37,14 @@ class PostTest extends TestCase
         $this->assertFalse($published_posts->contains($closed_post));
         $this->assertTrue($published_posts->contains($published_post));
     }
+
+    /** @test */
+    function ブログで非公開のときはtrueを返す()
+    {
+        $published_post = Post::factory()->make();
+        $closed_post = Post::factory()->statusClosed()->make();
+
+        $this->assertFalse($published_post->isClosed());
+        $this->assertTrue($closed_post->isClosed());
+    }
 }
