@@ -112,20 +112,10 @@ class PostControllerTest extends TestCase
     function ブログの詳細ページでコメントが表示される()
     {
         $post = Post::factory()->create();
-        $comment = Comment::factory()->create([
-            'created_at' => now()->subDays(2),
-            'name' => 'コメント太郎',
-            'post_id' => $post->id
-        ]);
-        $comment = Comment::factory()->create([
-            'created_at' => now()->subDays(3),
-            'name' => 'コメント二郎',
-            'post_id' => $post->id
-        ]);
-        $comment = Comment::factory()->create([
-            'created_at' => now()->subDays(1),
-            'name' => 'コメント三郎',
-            'post_id' => $post->id
+        Comment::factory()->createMany([
+            ['created_at' => now()->subDays(2), 'name' => 'コメント太郎', 'post_id' => $post->id],
+            ['created_at' => now()->subDays(3), 'name' => 'コメント二郎', 'post_id' => $post->id],
+            ['created_at' => now()->subDays(1), 'name' => 'コメント三郎', 'post_id' => $post->id]
         ]);
 
         $this->get(route('posts.show', $post->id))
