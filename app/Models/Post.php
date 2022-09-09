@@ -28,4 +28,9 @@ class Post extends Model
     {
         $query->where('status', self::PUBLISHED);
     }
+
+    public function isClosed()
+    {
+        return $this->status === self::CLOSED;
+    }
 }
