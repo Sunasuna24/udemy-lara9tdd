@@ -11,6 +11,9 @@ class Post extends Model
 {
     use HasFactory;
 
+    const CLOSED = 0;
+    const PUBLISH = 1;
+
     public function user()
     {
         return $this->belongsTo(User::class);
