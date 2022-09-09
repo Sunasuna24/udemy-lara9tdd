@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class PostControllerTest extends TestCase
@@ -80,5 +81,29 @@ class PostControllerTest extends TestCase
 
         $this->get(route('posts.show', $closed_post->id))
              ->assertForbidden();
+    }
+
+    /** @test */
+    function クリスマス以外の日は「メリークリスマス！」と表示しない()
+    {
+        $post = Post::factory()->create();
+
+        Carbon::setTestNow('2022-12-24');
+        
+        $this->get(route('posts.show', $post->id))
+             ->assertOk()
+             ->assertDontSee('メリークリスマス！');
+    }
+
+    /** @test */
+    function クリスマスの日は「メリークリスマス」と表示する()
+    {
+        $post = Post::factory()->create();
+
+        Carbon::setTestNow('2022-12-25');
+
+        $this->get(route('posts.show', $post->id))
+             ->assertSee('メリークリスマス！');
+
     }
 }
