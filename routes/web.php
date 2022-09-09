@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PostListController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PostListController::class, 'index']);
+Route::get('/', [PostController::class, 'index']);

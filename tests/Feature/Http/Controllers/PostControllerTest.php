@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class PostListControllerTest extends TestCase
+class PostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
