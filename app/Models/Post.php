@@ -12,7 +12,7 @@ class Post extends Model
     use HasFactory;
 
     const CLOSED = 0;
-    const PUBLISH = 1;
+    const PUBLISHED = 1;
 
     public function user()
     {
@@ -22,5 +22,10 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function scopeOnlyPublished($query)
+    {
+        $query->where('status', self::PUBLISHED);
     }
 }
