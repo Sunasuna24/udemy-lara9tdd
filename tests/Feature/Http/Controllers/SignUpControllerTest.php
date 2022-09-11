@@ -8,15 +8,10 @@ use Tests\TestCase;
 
 class SignUpControllerTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_example()
+    /** @test */
+    function 会員登録画面が表示される()
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        $this->get('signup')
+             ->assertOk();
     }
 }
