@@ -49,12 +49,14 @@ class SignUpControllerTest extends TestCase
         $url = 'signup';
 
         $this->post($url, ['name' => ''])
-             ->assertInvalid(['name' => '指定']);
+            ->assertInvalid(['name' => '指定']);
         $this->post($url, ['name' => str_repeat('あ', 21)])
-             ->assertInvalid(['name' => '20文字以下']);
+            ->assertInvalid(['name' => '20文字以下']);
         $this->post($url, ['name' => str_repeat('あ', 20)])
-             ->assertValid('name');
+            ->assertValid('name');
         $this->post($url, ['email' => ''])
-             ->assertInvalid(['email' => '指定']);
+            ->assertInvalid(['email' => '指定']);
+        $this->post($url, ['email' => 'aa@bb@cc'])
+            ->assertInvalid(['email' => '有効なメールアドレス']);
     }
 }
