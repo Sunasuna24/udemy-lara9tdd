@@ -55,7 +55,7 @@ class UserLoginControllerTest extends TestCase
     {
         $url = route('login');
 
-        $user = User::factory()->create([
+        User::factory()->create([
             'email' => 'user1@test.com',
             'password' => Hash::make('password')
         ]);
@@ -80,7 +80,7 @@ class UserLoginControllerTest extends TestCase
 
         try {
             $this->post($login_url, [])->assertRedirect();
-            $this->fail('例外が発生しませんでした'); 
+            $this->fail('例外が発生しませんでした');
         } catch (ValidationException $e) {
             $this->assertSame('emailは必ず指定してください。', $e->errors()['email'][0]);
         }
@@ -89,6 +89,21 @@ class UserLoginControllerTest extends TestCase
     /** @test */
     function 認証OKなのでvalidationExceptionが発生しない()
     {
-        //
+        $url = route('login');
+        $this->withoutExceptionHandling();
+
+        User::factory()->create([
+            'email' => 'user1@test.com',
+            'password' => Hash::make('password')
+        ]);
+
+        try {
+            $this->post($url, [
+                'email' => 'user1@test.com',
+                'password' => 'password'
+            ])->assertRedirect();
+        } catch (ValidationException $e) {
+            $this->fail('例外が発生しました');
+        }
     }
 }
