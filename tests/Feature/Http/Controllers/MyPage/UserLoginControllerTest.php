@@ -106,4 +106,14 @@ class UserLoginControllerTest extends TestCase
             $this->fail('例外が発生しました');
         }
     }
+
+    /** @test */
+    function ログアウトできる()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post(route('logout'))->assertRedirect(route('login'));
+        $this->get(route('login'))->assertSee('ログアウトしました');
+        $this->assertGuest();
+    }
 }
