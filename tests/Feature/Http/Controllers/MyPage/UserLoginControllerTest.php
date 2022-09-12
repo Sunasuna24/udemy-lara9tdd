@@ -63,5 +63,9 @@ class UserLoginControllerTest extends TestCase
             'email' => 'user1@test.com',
             'password' => 'notCorrectPassword'
         ])->assertRedirect($url);
+
+        $this->get($url)
+            ->assertOk()
+            ->assertSee('メールアドレスかパスワードが間違っています。');
     }
 }
