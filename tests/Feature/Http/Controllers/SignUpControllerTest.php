@@ -48,6 +48,8 @@ class SignUpControllerTest extends TestCase
     {
         $url = 'signup';
 
+        $this->post($url, [])->assertRedirect();
+
         // name周り
         $this->post($url, ['name' => ''])->assertInvalid(['name' => '指定']);
         $this->post($url, ['name' => str_repeat('あ', 21)])->assertInvalid(['name' => '20文字以下']);
