@@ -24,5 +24,9 @@ class UserLoginController extends Controller
             $request->session()->regenerate();
             return redirect('mypage/posts');
         }
+
+        return back()->withErrors([
+            'email' => 'メールアドレスかパスワードが間違っています。'
+        ])->withInput();
     }
 }

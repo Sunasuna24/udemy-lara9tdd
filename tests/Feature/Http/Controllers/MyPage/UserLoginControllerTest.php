@@ -48,4 +48,20 @@ class UserLoginControllerTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
     }
+
+    /** @test */
+    function 不備のある認証情報で、適切なメッセージが表示される()
+    {
+        $url = route('login');
+
+        $user = User::factory()->create([
+            'email' => 'user1@test.com',
+            'password' => Hash::make('password')
+        ]);
+
+        $this->from($url)->post($url, [
+            'email' => 'user1@test.com',
+            'password' => 'notCorrectPassword'
+        ])->assertRedirect($url);
+    }
 }
