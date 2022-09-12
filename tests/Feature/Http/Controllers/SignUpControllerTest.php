@@ -48,8 +48,8 @@ class SignUpControllerTest extends TestCase
     {
         $url = route('signup');
 
-        $this->get(route('signup'));
-        $this->post($url, [])->assertRedirect(route('signup'));
+        // $this->get(route('signup'));
+        $this->from(route('signup'))->post($url, [])->assertRedirect(route('signup'));
 
         // name周り
         $this->post($url, ['name' => ''])->assertInvalid(['name' => '指定']);
