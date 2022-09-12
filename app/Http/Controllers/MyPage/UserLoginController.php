@@ -9,6 +9,6 @@ class UserLoginController extends Controller
 {
     public function index()
     {
-        //
+        return view('mypage.login');
     }
 }
