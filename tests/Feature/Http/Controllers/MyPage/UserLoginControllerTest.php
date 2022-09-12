@@ -76,8 +76,14 @@ class UserLoginControllerTest extends TestCase
         $login_url = route('login');
 
         $this->withoutExceptionHandling();
-        $this->expectException(ValidationException::class);
-        $this->post($login_url, [])->assertRedirect();
+        // $this->expectException(ValidationException::class);
+
+        try {
+            $this->post($login_url, [])->assertRedirect();
+            $this->fail('例外が発生しませんでした'); 
+        } catch (ValidationException $e) {
+            $this->assertSame('emailは必ず指定してください。', $e->errors()['email'][0]);
+        }
     }
 
     /** @test */
