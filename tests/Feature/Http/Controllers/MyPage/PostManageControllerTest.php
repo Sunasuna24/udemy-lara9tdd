@@ -18,7 +18,7 @@ class PostManageControllerTest extends TestCase
     }
 
     /** @test */
-    function 認証している場合に限りマイページを開ける()
+    function 認証している場合とマイページTOPを開ける()
     {
         $user = User::factory()->create();
         $this->actingAs($user)->get('/mypage/posts')->assertOk();
