@@ -15,4 +15,17 @@ class UserLoginControllerTest extends TestCase
     {
         $this->get('mypage/login')->assertOk();
     }
+
+    /** @test */
+    function 不備があるとログインできない()
+    {
+        $url = route('login');
+
+        // $this->from($url)->post($url, [])->assertRedirect($url);
+
+        $this->post($url, ['email' => ''])->assertInvalid(['email' => '必ず指定']);
+        // $this->post($url, ['email' => 'aa@bb@cc'])->assertInvalid(['email' => '']);
+        // $this->post($url, ['email' => 'aa@ああ.いい'])->assertInvalid(['email' => '']);
+        // $this->post($url, ['' => ''])->assertInvalid(['' => '']);
+    }
 }
