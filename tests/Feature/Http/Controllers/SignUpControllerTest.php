@@ -61,5 +61,6 @@ class SignUpControllerTest extends TestCase
         $this->post($url, ['email' => 'example@email.com'])->assertInvalid(['email' => '値は既に存在']);
 
         $this->post($url, ['password' => ''])->assertInvalid(['password' => '必ず指定']);
+        $this->post($url, ['password' => '1234567'])->assertInvalid(['password' => '8文字以上']);
     }
 }
