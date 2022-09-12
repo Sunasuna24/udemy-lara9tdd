@@ -46,9 +46,10 @@ class SignUpControllerTest extends TestCase
     /** @test */
     function 不正なデータでユーザー登録できない()
     {
-        $url = 'signup';
+        $url = route('signup');
 
-        $this->post($url, [])->assertRedirect();
+        $this->get(route('signup'));
+        $this->post($url, [])->assertRedirect(route('signup'));
 
         // name周り
         $this->post($url, ['name' => ''])->assertInvalid(['name' => '指定']);
