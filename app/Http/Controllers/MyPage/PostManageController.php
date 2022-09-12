@@ -11,7 +11,8 @@ class PostManageController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('user_id', Auth::id())->get();
+        // $posts = Post::where('user_id', Auth::id())->get();
+        $posts = auth()->user()->posts;
         return view('mypage.posts.index', compact('posts'));
     }
 }
