@@ -16,7 +16,7 @@ Route::post('/mypage/login', [UserLoginController::class, 'login']);
 
 Route::middleware('auth')->group(function () {
     Route::post('/mypage/logout', [UserLoginController::class, 'logout'])->name('logout');
-    Route::get('/mypage/posts', [PostManageController::class, 'index']);
+    Route::get('/mypage/posts', [PostManageController::class, 'index'])->name('mypage.posts');
 });
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->whereNumber('post');
