@@ -42,4 +42,13 @@ class SignUpControllerTest extends TestCase
         $user = User::firstWhere($validData);
         $this->assertTrue(Hash::check('password', $user->password));
     }
+
+    /** @test */
+    function 不正なデータでユーザー登録できない()
+    {
+        $url = 'signup';
+
+        $this->post($url, ['name' => ''])
+             ->assertInvalid(['name' => '指定']);
+    }
 }
