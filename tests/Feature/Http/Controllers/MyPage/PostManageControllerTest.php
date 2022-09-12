@@ -12,12 +12,14 @@ class PostManageControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    function ゲストはブログを管理できない()
+    {
+        $this->get('/mypage/posts')->assertRedirect(route('login'));
+    }
+
+    /** @test */
     function 認証している場合に限りマイページを開ける()
     {
-        // 認証していないとき
-        $this->get('/mypage/posts')->assertRedirect(route('login'));
-
-        // 認証済みのとき
         $user = User::factory()->create();
         $this->actingAs($user)->get('/mypage/posts')->assertOk();
     }
