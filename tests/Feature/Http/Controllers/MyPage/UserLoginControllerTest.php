@@ -25,7 +25,7 @@ class UserLoginControllerTest extends TestCase
 
         $this->post($url, ['email' => ''])->assertInvalid(['email' => '必ず指定']);
         $this->post($url, ['email' => 'aa@bb@cc'])->assertInvalid(['email' => '有効なメールアドレス']);
-        // $this->post($url, ['email' => 'aa@ああ.いい'])->assertInvalid(['email' => '']);
+        $this->post($url, ['email' => 'aa@ああ.いい'])->assertInvalid(['email' => '有効なメールアドレス']);
         // $this->post($url, ['' => ''])->assertInvalid(['' => '']);
     }
 }
