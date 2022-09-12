@@ -16,7 +16,9 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function ゲストはブログを管理できない()
     {
-        $this->get('/mypage/posts')->assertRedirect(route('login'));
+        $login_url = route('login');
+        $this->get('/mypage/posts')->assertRedirect($login_url);
+        $this->get('/mypage/post/create')->assertRedirect($login_url);
     }
 
     /** @test */
@@ -30,5 +32,12 @@ class PostManageControllerTest extends TestCase
             ->assertOk()
             ->assertDontSee($other_post->title)
             ->assertSee($my_post->title);
+    }
+
+    /** @test */
+    function マイページでブログの新規登録画面を開ける()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user)->get('mypage/post/create')->assertOk();
     }
 }
