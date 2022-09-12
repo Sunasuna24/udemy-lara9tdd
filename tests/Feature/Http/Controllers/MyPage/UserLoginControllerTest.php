@@ -21,7 +21,7 @@ class UserLoginControllerTest extends TestCase
     {
         $url = route('login');
 
-        // $this->from($url)->post($url, [])->assertRedirect($url);
+        $this->from($url)->post($url, [])->assertRedirect($url);
 
         $this->post($url, ['email' => ''])->assertInvalid(['email' => '必ず指定']);
         $this->post($url, ['email' => 'aa@bb@cc'])->assertInvalid(['email' => '有効なメールアドレス']);
