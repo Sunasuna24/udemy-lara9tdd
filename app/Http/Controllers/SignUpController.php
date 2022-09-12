@@ -29,5 +29,7 @@ class SignUpController extends Controller
         ]);
 
         Auth::login($user);
+
+        return redirect('/mypage/posts');
     }
 }

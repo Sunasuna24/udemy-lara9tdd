@@ -33,7 +33,7 @@ class SignUpControllerTest extends TestCase
         $validData = User::factory()->validData();
 
         $this->post('signup', $validData)
-              ->assertOk();
+              ->assertRedirect('/mypage/posts');
 
         // データが保存されているかを検証する
         unset($validData['password']);  // ハッシュ化されて検証に使えないから除く
