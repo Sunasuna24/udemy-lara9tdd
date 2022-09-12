@@ -60,5 +60,10 @@ class SignUpControllerTest extends TestCase
             ->assertInvalid(['email' => '有効なメールアドレス']);
         $this->post($url, ['email' => 'aa@ああ@cc'])
             ->assertInvalid(['email' => '有効なメールアドレス']);
+
+        User::factory()->create(['email' => 'example@email.com']);
+
+        $this->post($url, ['email' => 'example@email.com'])
+            ->assertInvalid(['email' => '値は既に存在']);
     }
 }

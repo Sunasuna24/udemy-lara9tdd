@@ -17,7 +17,7 @@ class SignUpController extends Controller
     {
         $request->validate([
             'name' => ['required', 'max:20'],
-            'email' => ['required', 'email:filter']
+            'email' => ['required', 'email:filter', 'unique:users']
         ]);
 
         User::create([
