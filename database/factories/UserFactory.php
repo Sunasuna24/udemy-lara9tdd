@@ -27,6 +27,20 @@ class UserFactory extends Factory
     }
 
     /**
+     * 必要な情報だけを返すようにする。
+     *
+     * @return static
+     */
+    public function validData()
+    {
+        return [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'password' => 'password',
+        ];
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      *
      * @return static
