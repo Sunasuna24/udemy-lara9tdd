@@ -52,5 +52,7 @@ class SignUpControllerTest extends TestCase
              ->assertInvalid(['name' => '指定']);
         $this->post($url, ['name' => str_repeat('あ', 21)])
              ->assertInvalid(['name' => '20文字以下']);
+        $this->post($url, ['name' => str_repeat('あ', 20)])
+             ->assertValid('name');
     }
 }
