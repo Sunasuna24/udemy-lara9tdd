@@ -58,5 +58,7 @@ class SignUpControllerTest extends TestCase
             ->assertInvalid(['email' => '指定']);
         $this->post($url, ['email' => 'aa@bb@cc'])
             ->assertInvalid(['email' => '有効なメールアドレス']);
+        $this->post($url, ['email' => 'aa@ああ@cc'])
+            ->assertInvalid(['email' => '有効なメールアドレス']);
     }
 }
