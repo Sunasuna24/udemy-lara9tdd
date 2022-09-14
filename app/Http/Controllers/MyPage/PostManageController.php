@@ -36,7 +36,7 @@ class PostManageController extends Controller
             'user_id' => Auth::id()
         ]);
 
-        return redirect('mypage/post/edit'.$post->id);
+        return redirect('mypage/post/edit/'.$post->id);
     }
 
     public function edit(Post $post)
@@ -68,6 +68,10 @@ class PostManageController extends Controller
 
     public function destroy(Post $post)
     {
+        if (Auth::user()->isNot($post->user)) {
+            abort(403);
+        }
+
         $post->delete();
         // 投稿に付随するコメントはDBの制約を用いて削除する
 

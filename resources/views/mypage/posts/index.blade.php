@@ -13,13 +13,13 @@
         <td>
             <a href="{{ route('mypage.post.edit', $post->id) }}">{{ $post->title }}</a>
         </td>
-        {{-- <td>
+        <td>
             <form action="{{ route('mypage.post.delete', $post->id) }}" method="post">
                 @csrf
                 @method('delete')
                 <input type="submit" value="削除">
             </form>
-        </td> --}}
+        </td>
     </tr>
     @endforeach
 </table>
