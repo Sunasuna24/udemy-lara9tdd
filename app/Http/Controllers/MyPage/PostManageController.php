@@ -41,6 +41,10 @@ class PostManageController extends Controller
 
     public function edit(Post $post)
     {
+        if (Auth::user()->isNot($post->user)) {
+            abort(403);
+        }
+
         $data = old() ?: $post;
 
         return view('mypage.posts.edit', compact('post', 'data'));

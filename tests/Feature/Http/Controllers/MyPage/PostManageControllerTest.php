@@ -110,7 +110,11 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function 他人のブログの編集画面は開けない()
     {
-        //
+        $post = Post::factory()->create();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->get('mypage/post/edit/' . $post->id)->assertForbidden();
     }
 
     /** @test */
