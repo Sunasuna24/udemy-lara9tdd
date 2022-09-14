@@ -52,6 +52,10 @@ class PostManageController extends Controller
 
     public function update(Post $post, Request $request)
     {
+        if (Auth::user()->isNot($post->user)) {
+            abort(403);
+        }
+
         $post->update([
             'title' => $request->title,
             'body' => $request->body,

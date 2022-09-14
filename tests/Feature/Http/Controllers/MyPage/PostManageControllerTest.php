@@ -142,7 +142,20 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function 他人のブログは更新できない()
     {
-        //
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $post = Post::factory()->create([
+            'title' => '元タイトル'
+        ]);
+        $validData = [
+            'title' => '新タイトル',
+            'body' => '新しい本文です。',
+            'status' => '1'
+        ];
+
+        $this->post(route('mypage.post.edit', $post->id), $validData)->assertForbidden();
+        $this->assertSame('元タイトル', $post->fresh()->title);
     }
 
     /** @test */
