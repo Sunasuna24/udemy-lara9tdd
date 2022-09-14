@@ -23,10 +23,11 @@ class PostManageController extends Controller
 
     public function store(Request $request)
     {
+        $status = boolval($request->status);
         $post = Post::create([
             'title' => $request->title,
             'body' => $request->body,
-            'status' => $request->status,
+            'status' => $status,
             'user_id' => Auth::id()
         ]);
 

@@ -64,12 +64,27 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function 非公開ステータスのブログを新規登録する()
     {
-        //
+        [$user1, $me, $user3] = User::factory(3)->create();
+        $this->actingAs($me);
+
+        $validData = [
+            'title' => '私のブログのタイトル',
+            'body' => '私のブログの本文'
+        ];
+
+        $response = $this->post('mypage/post/create', $validData);
+        $post = Post::first();
+
+        $response->assertRedirect('mypage/post/edit'.$post->id);
+        $this->assertDatabaseHas('posts', array_merge($validData, [
+            'user_id' => $me->id,
+            'status' => false
+        ]));
     }
 
     /** @test */
     function ブログ登録のときの入力チェック()
     {
-        //
+        $this->markTestIncomplete();
     }
 }
