@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/mypage/post/create', [PostManageController::class, 'store']);
     Route::get('/mypage/post/edit/{post}', [PostManageController::class, 'edit'])->name('mypage.post.edit');
     Route::post('/mypage/post/edit/{post}', [PostManageController::class, 'update']);
+    Route::delete('/mypage/post/delete/{post}', [PostManageController::class, 'destroy']);
 });
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->whereNumber('post');

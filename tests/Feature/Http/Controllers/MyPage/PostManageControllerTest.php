@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Http\Controllers\MyPage;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use PhpParser\Node\Expr\AssignOp\Pow;
 use Tests\TestCase;
 
 class PostManageControllerTest extends TestCase
@@ -22,6 +22,7 @@ class PostManageControllerTest extends TestCase
         $this->post('/mypage/post/create', [])->assertRedirect($login_url);
         $this->get('mypage/post/edit/1')->assertRedirect($login_url);
         $this->post('mypage/post/edit/1')->assertRedirect($login_url);
+        $this->delete('mypage/post/delete/1')->assertRedirect($login_url);
     }
 
     /** @test */
@@ -156,6 +157,21 @@ class PostManageControllerTest extends TestCase
 
         $this->post(route('mypage.post.edit', $post->id), $validData)->assertForbidden();
         $this->assertSame('元タイトル', $post->fresh()->title);
+    }
+
+    /** @test */
+    function 自分のブログを削除して、コメントも削除される()
+    {
+        $post = Post::factory()->create();
+        $my_posts_comments = Comment::factory()->create(['post_id' => $post->id]);
+        $other_posts_comments = Comment::factory()->create();
+        $this->actingAs($post->user);
+        $this->delete('mypage/post/delete/' . $post->id)->assertRedirect('mypage/posts');
+
+        $this->assertModelMissing($post);
+
+        $this->assertModelMissing($my_posts_comments);
+        $this->assertModelExists($other_posts_comments);
     }
 
     /** @test */

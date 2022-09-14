@@ -65,4 +65,12 @@ class PostManageController extends Controller
         $update_message = 'ブログを更新しました。';
         return redirect(route('mypage.post.edit', $post->id))->with('status', $update_message);
     }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+        // 投稿に付随するコメントはDBの制約を用いて削除する
+
+        return redirect('mypage/posts');
+    }
 }
