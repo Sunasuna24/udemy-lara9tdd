@@ -19,6 +19,7 @@ class PostManageControllerTest extends TestCase
         $login_url = route('login');
         $this->get('/mypage/posts')->assertRedirect($login_url);
         $this->get('/mypage/post/create')->assertRedirect($login_url);
+        $this->post('/mypage/post/create', [])->assertRedirect($login_url);
     }
 
     /** @test */
@@ -44,8 +45,6 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function 公開ステータスのブログを新規登録する()
     {
-        $this->withoutExceptionHandling();
-
         [$user1, $me, $user3] = User::factory(3)->create();
         $this->actingAs($me);
 
