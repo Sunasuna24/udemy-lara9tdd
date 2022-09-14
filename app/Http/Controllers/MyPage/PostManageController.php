@@ -20,4 +20,16 @@ class PostManageController extends Controller
     {
         return view('mypage.posts.create');
     }
+
+    public function store(Request $request)
+    {
+        $post = Post::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'status' => $request->status,
+            'user_id' => Auth::id()
+        ]);
+
+        return redirect('mypage/post/edit'.$post->id);
+    }
 }
