@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Http\Controllers\MyPage;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use PhpParser\Node\Expr\AssignOp\Pow;
 use Tests\TestCase;
 
 class PostManageControllerTest extends TestCase
@@ -20,6 +20,9 @@ class PostManageControllerTest extends TestCase
         $this->get('/mypage/posts')->assertRedirect($login_url);
         $this->get('/mypage/post/create')->assertRedirect($login_url);
         $this->post('/mypage/post/create', [])->assertRedirect($login_url);
+        $this->get('mypage/post/edit/1')->assertRedirect($login_url);
+        $this->post('mypage/post/edit/1')->assertRedirect($login_url);
+        $this->delete('mypage/post/delete/1')->assertRedirect($login_url);
     }
 
     /** @test */
@@ -95,5 +98,89 @@ class PostManageControllerTest extends TestCase
         $this->post($url, ['title' => str_repeat('a', 256)])->assertInvalid(['title' => '文字以下で指定']);
         $this->post($url, ['title' => str_repeat('a', 255)])->assertValid('title');
         $this->post($url, ['body' => ''])->assertInvalid(['body' => '必ず指定']);
+    }
+
+    /** @test */
+    function 自分のブログの編集画面は開ける()
+    {
+        $post = Post::factory()->create();
+        $this->actingAs($post->user);
+
+        $this->get('mypage/post/edit/' . $post->id)->assertOk();
+    }
+
+    /** @test */
+    function 他人のブログの編集画面は開けない()
+    {
+        $post = Post::factory()->create();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->get('mypage/post/edit/' . $post->id)->assertForbidden();
+    }
+
+    /** @test */
+    function 自分のブログは更新できる()
+    {
+        $post = Post::factory()->create();
+        $this->actingAs($post->user);
+
+        $validData = [
+            'title' => '新タイトル',
+            'body' => '新しい本文です。',
+            'status' => '1'
+        ];
+
+        $this->post(route('mypage.post.edit', $post->id), $validData)->assertRedirect(route('mypage.post.edit', $post->id));
+        $this->get(route('mypage.post.edit', $post->id))->assertSee('ブログを更新しました。');
+        $this->assertDatabaseHas('posts', $validData);
+        $this->assertCount(1, Post::all());
+        $post->refresh();
+        $this->assertSame($validData['title'], $post->title);
+        $this->assertSame($validData['body'], $post->body);
+    }
+
+    /** @test */
+    function 他人のブログは更新できない()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $post = Post::factory()->create([
+            'title' => '元タイトル'
+        ]);
+        $validData = [
+            'title' => '新タイトル',
+            'body' => '新しい本文です。',
+            'status' => '1'
+        ];
+
+        $this->post(route('mypage.post.edit', $post->id), $validData)->assertForbidden();
+        $this->assertSame('元タイトル', $post->fresh()->title);
+    }
+
+    /** @test */
+    function 自分のブログを削除して、コメントも削除される()
+    {
+        $post = Post::factory()->create();
+        $my_posts_comments = Comment::factory()->create(['post_id' => $post->id]);
+        $other_posts_comments = Comment::factory()->create();
+        $this->actingAs($post->user);
+        $this->delete('mypage/post/delete/' . $post->id)->assertRedirect('mypage/posts');
+
+        $this->assertModelMissing($post);
+
+        $this->assertModelMissing($my_posts_comments);
+        $this->assertModelExists($other_posts_comments);
+    }
+
+    /** @test */
+    function 他人のブログは削除できない()
+    {
+        $post = Post::factory()->create();
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->delete('mypage/post/delete/' . $post->id)->assertForbidden();
+        $this->assertModelExists($post);
     }
 }

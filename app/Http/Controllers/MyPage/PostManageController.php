@@ -36,6 +36,45 @@ class PostManageController extends Controller
             'user_id' => Auth::id()
         ]);
 
-        return redirect('mypage/post/edit'.$post->id);
+        return redirect('mypage/post/edit/'.$post->id);
+    }
+
+    public function edit(Post $post)
+    {
+        if (Auth::user()->isNot($post->user)) {
+            abort(403);
+        }
+
+        $data = old() ?: $post;
+
+        return view('mypage.posts.edit', compact('post', 'data'));
+    }
+
+    public function update(Post $post, Request $request)
+    {
+        if (Auth::user()->isNot($post->user)) {
+            abort(403);
+        }
+
+        $post->update([
+            'title' => $request->title,
+            'body' => $request->body,
+            'status' => boolval($request->status)
+        ]);
+
+        $update_message = 'ブログを更新しました。';
+        return redirect(route('mypage.post.edit', $post->id))->with('status', $update_message);
+    }
+
+    public function destroy(Post $post)
+    {
+        if (Auth::user()->isNot($post->user)) {
+            abort(403);
+        }
+
+        $post->delete();
+        // 投稿に付随するコメントはDBの制約を用いて削除する
+
+        return redirect('mypage/posts');
     }
 }

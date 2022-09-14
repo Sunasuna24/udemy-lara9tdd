@@ -19,6 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage/posts', [PostManageController::class, 'index'])->name('mypage.posts');
     Route::get('/mypage/post/create', [PostManageController::class, 'create']);
     Route::post('/mypage/post/create', [PostManageController::class, 'store']);
+    Route::get('/mypage/post/edit/{post}', [PostManageController::class, 'edit'])->name('mypage.post.edit');
+    Route::post('/mypage/post/edit/{post}', [PostManageController::class, 'update']);
+    Route::delete('/mypage/post/delete/{post}', [PostManageController::class, 'destroy'])->name('mypage.post.delete');
 });
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->whereNumber('post');
