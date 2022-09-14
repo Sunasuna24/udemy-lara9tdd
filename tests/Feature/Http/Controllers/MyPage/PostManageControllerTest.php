@@ -20,6 +20,7 @@ class PostManageControllerTest extends TestCase
         $this->get('/mypage/posts')->assertRedirect($login_url);
         $this->get('/mypage/post/create')->assertRedirect($login_url);
         $this->post('/mypage/post/create', [])->assertRedirect($login_url);
+        $this->get('mypage/post/edit/1')->assertRedirect($login_url);
     }
 
     /** @test */
@@ -95,5 +96,32 @@ class PostManageControllerTest extends TestCase
         $this->post($url, ['title' => str_repeat('a', 256)])->assertInvalid(['title' => '文字以下で指定']);
         $this->post($url, ['title' => str_repeat('a', 255)])->assertValid('title');
         $this->post($url, ['body' => ''])->assertInvalid(['body' => '必ず指定']);
+    }
+
+    /** @test */
+    function 自分のブログの編集画面は開ける()
+    {
+        $post = Post::factory()->create();
+        $this->actingAs($post->user);
+
+        $this->get('mypage/post/edit/' . $post->id)->assertOk();
+    }
+
+    /** @test */
+    function 他人のブログの編集画面は開けない()
+    {
+        //
+    }
+
+    /** @test */
+    function 他人のブログは更新できない()
+    {
+        //
+    }
+
+    /** @test */
+    function 他人のブログは削除できない()
+    {
+        //
     }
 }

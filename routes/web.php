@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage/posts', [PostManageController::class, 'index'])->name('mypage.posts');
     Route::get('/mypage/post/create', [PostManageController::class, 'create']);
     Route::post('/mypage/post/create', [PostManageController::class, 'store']);
+    Route::get('/mypage/post/edit/{post}', [PostManageController::class, 'edit']);
 });
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->whereNumber('post');

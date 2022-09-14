@@ -38,4 +38,11 @@ class PostManageController extends Controller
 
         return redirect('mypage/post/edit'.$post->id);
     }
+
+    public function edit(Post $post)
+    {
+        $data = old() ?: $post;
+
+        return view('mypage.posts.edit', compact('post', 'data'));
+    }
 }
