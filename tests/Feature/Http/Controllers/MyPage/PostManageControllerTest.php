@@ -19,6 +19,7 @@ class PostManageControllerTest extends TestCase
         $login_url = route('login');
         $this->get('/mypage/posts')->assertRedirect($login_url);
         $this->get('/mypage/post/create')->assertRedirect($login_url);
+        $this->post('/mypage/post/create', [])->assertRedirect($login_url);
     }
 
     /** @test */
@@ -39,5 +40,60 @@ class PostManageControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user)->get('mypage/post/create')->assertOk();
+    }
+
+    /** @test */
+    function 公開ステータスのブログを新規登録する()
+    {
+        [$user1, $me, $user3] = User::factory(3)->create();
+        $this->actingAs($me);
+
+        $validData = [
+            'title' => '私のブログのタイトル',
+            'body' => '私のブログの本文',
+            'status' => 1
+        ];
+
+        $response = $this->post('mypage/post/create', $validData);
+        $post = Post::first();
+
+        $response->assertRedirect('mypage/post/edit'.$post->id);
+        $this->assertDatabaseHas('posts', array_merge($validData, ['user_id' => $me->id]));
+    }
+
+    /** @test */
+    function 非公開ステータスのブログを新規登録する()
+    {
+        [$user1, $me, $user3] = User::factory(3)->create();
+        $this->actingAs($me);
+
+        $validData = [
+            'title' => '私のブログのタイトル',
+            'body' => '私のブログの本文'
+        ];
+
+        $response = $this->post('mypage/post/create', $validData);
+        $post = Post::first();
+
+        $response->assertRedirect('mypage/post/edit'.$post->id);
+        $this->assertDatabaseHas('posts', array_merge($validData, [
+            'user_id' => $me->id,
+            'status' => false
+        ]));
+    }
+
+    /** @test */
+    function ブログ登録のときの入力チェック()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $url = 'mypage/post/create';
+        $this->from($url)->post($url, [])->assertRedirect($url);
+
+        $this->post($url, ['title' => []])->assertInvalid(['title' => '必ず指定']);
+        $this->post($url, ['title' => str_repeat('a', 256)])->assertInvalid(['title' => '文字以下で指定']);
+        $this->post($url, ['title' => str_repeat('a', 255)])->assertValid('title');
+        $this->post($url, ['body' => ''])->assertInvalid(['body' => '必ず指定']);
     }
 }

@@ -20,4 +20,22 @@ class PostManageController extends Controller
     {
         return view('mypage.posts.create');
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => ['required', 'max:255'],
+            'body' => ['required']
+        ]);
+
+        $status = boolval($request->status);
+        $post = Post::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'status' => $status,
+            'user_id' => Auth::id()
+        ]);
+
+        return redirect('mypage/post/edit'.$post->id);
+    }
 }
