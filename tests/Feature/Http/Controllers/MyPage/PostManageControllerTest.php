@@ -85,6 +85,15 @@ class PostManageControllerTest extends TestCase
     /** @test */
     function ブログ登録のときの入力チェック()
     {
-        $this->markTestIncomplete();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $url = 'mypage/post/create';
+        $this->from($url)->post($url, [])->assertRedirect($url);
+
+        $this->post($url, ['title' => []])->assertInvalid(['title' => '必ず指定']);
+        $this->post($url, ['title' => str_repeat('a', 256)])->assertInvalid(['title' => '文字以下で指定']);
+        $this->post($url, ['title' => str_repeat('a', 255)])->assertValid('title');
+        $this->post($url, ['body' => ''])->assertInvalid(['body' => '必ず指定']);
     }
 }

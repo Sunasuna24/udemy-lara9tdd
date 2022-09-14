@@ -23,6 +23,11 @@ class PostManageController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => ['required', 'max:255'],
+            'body' => ['required']
+        ]);
+
         $status = boolval($request->status);
         $post = Post::create([
             'title' => $request->title,
