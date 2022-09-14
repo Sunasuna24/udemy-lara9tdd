@@ -10,11 +10,10 @@
     </tr>
     @foreach ($posts as $post)
     <tr>
-        <td>{{ $post->title }}</td>
-        {{-- <td>
-            <a href="{{ route('mypage.post.edit') }}">{{ $post->title }}</a>
-        </td>
         <td>
+            <a href="{{ route('mypage.post.edit', $post->id) }}">{{ $post->title }}</a>
+        </td>
+        {{-- <td>
             <form action="{{ route('mypage.post.delete', $post->id) }}" method="post">
                 @csrf
                 @method('delete')
