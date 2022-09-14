@@ -21,6 +21,7 @@ class PostManageControllerTest extends TestCase
         $this->get('/mypage/post/create')->assertRedirect($login_url);
         $this->post('/mypage/post/create', [])->assertRedirect($login_url);
         $this->get('mypage/post/edit/1')->assertRedirect($login_url);
+        $this->post('mypage/post/edit/1')->assertRedirect($login_url);
     }
 
     /** @test */
@@ -115,6 +116,27 @@ class PostManageControllerTest extends TestCase
         $this->actingAs($user);
 
         $this->get('mypage/post/edit/' . $post->id)->assertForbidden();
+    }
+
+    /** @test */
+    function 自分のブログは更新できる()
+    {
+        $post = Post::factory()->create();
+        $this->actingAs($post->user);
+
+        $validData = [
+            'title' => '新タイトル',
+            'body' => '新しい本文です。',
+            'status' => '1'
+        ];
+
+        $this->post(route('mypage.post.edit', $post->id), $validData)->assertRedirect(route('mypage.post.edit', $post->id));
+        $this->get(route('mypage.post.edit', $post->id))->assertSee('ブログを更新しました。');
+        $this->assertDatabaseHas('posts', $validData);
+        $this->assertCount(1, Post::all());
+        $post->refresh();
+        $this->assertSame($validData['title'], $post->title);
+        $this->assertSame($validData['body'], $post->body);
     }
 
     /** @test */

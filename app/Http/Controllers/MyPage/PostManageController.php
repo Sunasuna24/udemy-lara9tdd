@@ -49,4 +49,16 @@ class PostManageController extends Controller
 
         return view('mypage.posts.edit', compact('post', 'data'));
     }
+
+    public function update(Post $post, Request $request)
+    {
+        $post->update([
+            'title' => $request->title,
+            'body' => $request->body,
+            'status' => boolval($request->status)
+        ]);
+
+        $update_message = 'ブログを更新しました。';
+        return redirect(route('mypage.post.edit', $post->id))->with('status', $update_message);
+    }
 }
