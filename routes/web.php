@@ -4,6 +4,7 @@ use App\Http\Controllers\MyPage\PostManageController;
 use App\Http\Controllers\MyPage\UserLoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SignUpController;
+use App\Http\Middleware\PostShowLimit;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PostController::class, 'index']);
