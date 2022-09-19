@@ -10,6 +10,7 @@ class StrRandomTest extends TestCase
     /** @test */
     function StrRandom_正しい文字数を返す()
     {
+        class_alias(\Illuminate\Support\Str::class, \Str::class);
         $random = new StrRandom();
 
         $ret1 = $random->get(8);
