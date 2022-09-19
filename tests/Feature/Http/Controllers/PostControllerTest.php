@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Http\Middleware\PostShowLimit;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
@@ -70,8 +69,6 @@ class PostControllerTest extends TestCase
     /** @test */
     function ブログの詳細画面を表示できる()
     {
-        $this->withoutMiddleware(PostShowLimit::class);
-
         $post = Post::factory()->create();
 
         $this->get('posts/' . $post->id)
