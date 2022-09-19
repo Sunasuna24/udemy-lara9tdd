@@ -131,9 +131,13 @@ class PostControllerTest extends TestCase
     /** @test */
     function ブログの詳細画面をランダムな文字列が表示される()
     {
-        $this->instance(StrRandom::class, Mockery::mock(StrRandom::class, function (MockInterface $mock) {
-            $mock->shouldReceive('get')->once()->with(10)->andReturn('Hello, world');
-        }));
+        // $this->instance(StrRandom::class, Mockery::mock(StrRandom::class, function (MockInterface $mock) {
+        //     $mock->shouldReceive('get')->once()->with(10)->andReturn('Hello, world');
+        // }));
+
+        $mock = Mockery::mock(StrRandom::class);
+        $mock->shouldReceive('get')->once()->with(10)->andReturn('Hello, world');
+        $this->instance(StrRandom::class, $mock);
 
         $post = Post::factory()->create();
 
