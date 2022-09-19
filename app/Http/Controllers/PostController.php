@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\StrRandom;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -14,13 +15,13 @@ class PostController extends Controller
         return view('index')->with('posts', $posts);
     }
 
-    public function show(Post $post)
+    public function show(Post $post, StrRandom $str_random)
     {
         if ($post->isClosed()) {
             abort(403);
         }
 
-        $random = \Str::random(10);
+        $random = $str_random->get(10);
 
         return view('posts.show', compact('post', 'random'));
     }

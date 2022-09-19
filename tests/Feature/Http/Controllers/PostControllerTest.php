@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Actions\StrRandom;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
@@ -9,6 +10,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 // use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Carbon;
+use Mockery;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class PostControllerTest extends TestCase
@@ -123,5 +126,19 @@ class PostControllerTest extends TestCase
         $this->get(route('posts.show', $post->id))
              ->assertOk()
              ->assertSeeInOrder(['コメント二郎', 'コメント太郎', 'コメント三郎']);
+    }
+
+    /** @test */
+    function ブログの詳細画面をランダムな文字列が表示される()
+    {
+        $this->instance(StrRandom::class, Mockery::mock(StrRandom::class, function (MockInterface $mock) {
+            $mock->shouldReceive('get')->once()->with(10)->andReturn('Hello, world');
+        }));
+
+        $post = Post::factory()->create();
+
+        $this->get('posts/' . $post->id)
+              ->assertOk()
+              ->assertSee('Hello, world');
     }
 }
