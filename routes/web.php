@@ -4,6 +4,7 @@ use App\Http\Controllers\MyPage\PostManageController;
 use App\Http\Controllers\MyPage\UserLoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SignUpController;
+use App\Http\Middleware\PostShowLimit;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PostController::class, 'index']);
@@ -24,4 +25,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/mypage/post/delete/{post}', [PostManageController::class, 'destroy'])->name('mypage.post.delete');
 });
 
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->whereNumber('post');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->whereNumber('post')->middleware(PostShowLimit::class);
