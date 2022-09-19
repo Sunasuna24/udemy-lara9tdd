@@ -25,4 +25,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/mypage/post/delete/{post}', [PostManageController::class, 'destroy'])->name('mypage.post.delete');
 });
 
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->whereNumber('post')->middleware(PostShowLimit::class);
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->whereNumber('post');
