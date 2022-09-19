@@ -16,7 +16,12 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        if ($post->isClosed()) abort(403);
-        return view('posts.show')->with('post', $post);
+        if ($post->isClosed()) {
+            abort(403);
+        }
+
+        $random = \Str::random(10);
+
+        return view('posts.show', compact('post', 'random'));
     }
 }
